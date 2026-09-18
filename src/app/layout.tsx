@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "./experience.css";
 import { AppShell } from "@/components/layout/app-shell";
 import { siteConfig } from "@/config/site";
 
@@ -28,7 +29,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      className={`${geistSans.variable} ${geistMono.variable}`}
+    >
       <body className="bg-background font-sans text-foreground antialiased">
         <AppShell>{children}</AppShell>
       </body>

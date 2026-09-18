@@ -1,10 +1,4 @@
-import { PageShell } from "@/components/layout/page-shell";
-import { TrackerPageContent } from "@/components/tracker/tracker-page-content";
-
+import { CollectionExperience } from "@/components/experience/collection";
 export default function TrackerPage() {
-  return (
-    <PageShell>
-      <TrackerPageContent />
-    </PageShell>
-  );
+  return <CollectionExperience />;
 }
