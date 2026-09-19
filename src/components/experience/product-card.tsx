@@ -7,6 +7,7 @@ import { addToCompare, removeFromCompare } from "@/lib/compare/compare-store";
 import { toggleChoice } from "@/lib/tracker/tracker-store";
 import { notify, persist, useChoices, useCompare } from "./state";
 import { price, ProductPhoto, Rating } from "./shared";
+import { MetricStrip } from "./scorecard";
 
 export function SaveButton({
   product,
@@ -81,7 +82,10 @@ export function EditorialProductCard({
         </Link>
         <SaveButton product={product} />
         <div className="photo-rating">
-          <Rating band={product.rating.band} />
+          <Rating
+            band={product.rating.band}
+            numericScore={product.rating.numericScore}
+          />
         </div>
       </div>
       <div className="product-meta">
@@ -97,6 +101,7 @@ export function EditorialProductCard({
           .replace(/seed evidence/g, "illustrative evidence")
           .replace(/seed rating/g, "example rating")}
       </p>
+      <MetricStrip metrics={product.rating.metrics} compact />
       <div className="product-card-bottom">
         <div>
           <strong>

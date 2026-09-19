@@ -6,6 +6,7 @@ import type {
   RatingDimensionKey,
   ReasonCode,
   SustainabilityBand,
+  SustainabilityMetric,
   SustainabilityRating,
 } from "@/lib/types/scoring";
 
@@ -15,6 +16,7 @@ type AssembleScoreInput = {
   band: SustainabilityBand;
   confidence: ConfidenceLevel;
   numericScore?: number;
+  metrics: SustainabilityMetric[];
   dimensions: Array<{
     key: RatingDimensionKey;
     status: RatingDimension["status"];
@@ -42,6 +44,7 @@ export function assembleProductRating(
     ratingVersion: "susco-v0.1-category-seed",
     band: input.band,
     numericScore: input.numericScore,
+    metrics: input.metrics,
     confidence: input.confidence,
     perDimension: input.dimensions.map((dimension) => ({
       key: dimension.key,

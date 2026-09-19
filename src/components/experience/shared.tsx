@@ -61,13 +61,29 @@ export function ProductPhoto({
     />
   );
 }
-export function Rating({ band }: { band: SustainabilityBand }) {
+export function Rating({
+  band,
+  numericScore,
+}: {
+  band: SustainabilityBand;
+  numericScore?: number;
+}) {
   return (
     <span
       className={`rating rating-${band.toLowerCase().replaceAll(" ", "-")}`}
     >
-      <span aria-hidden="true" />
-      {band}
+      {numericScore !== undefined ? (
+        <>
+          <strong>{numericScore}</strong>
+          <small>/100</small>
+          <em>{band}</em>
+        </>
+      ) : (
+        <>
+          <span aria-hidden="true" />
+          {band}
+        </>
+      )}
     </span>
   );
 }

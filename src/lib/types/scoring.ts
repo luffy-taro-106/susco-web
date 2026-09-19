@@ -9,6 +9,22 @@ export type ConfidenceLevel = "High" | "Medium" | "Low";
 
 export type RatingEntityType = "product" | "brand" | "company";
 
+export type SustainabilityMetricKey =
+  | "materials_ingredients"
+  | "packaging_circularity"
+  | "sourcing_people"
+  | "claims_certifications"
+  | "evidence_transparency";
+
+export type SustainabilityMetric = {
+  key: SustainabilityMetricKey;
+  label: string;
+  shortLabel: string;
+  description: string;
+  score: number;
+  weight: number;
+};
+
 export type RatingDimensionStatus =
   | "positive"
   | "mixed"
@@ -64,6 +80,7 @@ export type SustainabilityRating = {
   ratingVersion: string;
   band: SustainabilityBand;
   numericScore?: number;
+  metrics: SustainabilityMetric[];
   confidence: ConfidenceLevel;
   perDimension: RatingDimension[];
   capsApplied?: string[];

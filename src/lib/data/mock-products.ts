@@ -1,4 +1,9 @@
 import { assembleProductRating } from "@/lib/scoring/score-assembler";
+import {
+  assembleSustainabilityMetrics,
+  calculateOverallScore,
+  type SustainabilityMetricScores,
+} from "@/lib/scoring/metric-framework";
 import { getEvidenceForProduct } from "@/lib/data/mock-evidence";
 import type { CommercePlatform, PlatformListing } from "@/lib/types/commerce";
 import type { Product } from "@/lib/types/product";
@@ -11,6 +16,93 @@ import type {
 } from "@/lib/types/scoring";
 
 const updatedAt = "2026-06-02";
+
+const productMetricScores: Record<string, SustainabilityMetricScores> = {
+  "auraa-daily-sun-fluid": {
+    materials_ingredients: 78,
+    packaging_circularity: 46,
+    sourcing_people: 55,
+    claims_certifications: 61,
+    evidence_transparency: 80,
+  },
+  "meadow-skin-gel-cleanser": {
+    materials_ingredients: 74,
+    packaging_circularity: 42,
+    sourcing_people: 48,
+    claims_certifications: 50,
+    evidence_transparency: 91,
+  },
+  "root-ritual-refill-shampoo": {
+    materials_ingredients: 78,
+    packaging_circularity: 86,
+    sourcing_people: 72,
+    claims_certifications: 88,
+    evidence_transparency: 86,
+  },
+  "loopkind-barrier-moisturizer": {
+    materials_ingredients: 55,
+    packaging_circularity: 38,
+    sourcing_people: 34,
+    claims_certifications: 35,
+    evidence_transparency: 48,
+  },
+  "civic-denim-recycled-jeans": {
+    materials_ingredients: 78,
+    packaging_circularity: 72,
+    sourcing_people: 70,
+    claims_certifications: 66,
+    evidence_transparency: 94,
+  },
+  "threadlane-organic-tee": {
+    materials_ingredients: 92,
+    packaging_circularity: 82,
+    sourcing_people: 86,
+    claims_certifications: 96,
+    evidence_transparency: 94,
+  },
+  "stridefield-everyday-sneaker": {
+    materials_ingredients: 42,
+    packaging_circularity: 32,
+    sourcing_people: 31,
+    claims_certifications: 37,
+    evidence_transparency: 53,
+  },
+  "reknit-compressive-leggings": {
+    materials_ingredients: 70,
+    packaging_circularity: 84,
+    sourcing_people: 73,
+    claims_certifications: 76,
+    evidence_transparency: 92,
+  },
+  "origin-cup-shade-grown-coffee": {
+    materials_ingredients: 88,
+    packaging_circularity: 62,
+    sourcing_people: 72,
+    claims_certifications: 78,
+    evidence_transparency: 85,
+  },
+  "harvest-bar-nut-protein": {
+    materials_ingredients: 58,
+    packaging_circularity: 28,
+    sourcing_people: 44,
+    claims_certifications: 38,
+    evidence_transparency: 52,
+  },
+  "nimbo-sparkling-lemon-drink": {
+    materials_ingredients: 65,
+    packaging_circularity: 56,
+    sourcing_people: 45,
+    claims_certifications: 43,
+    evidence_transparency: 51,
+  },
+  "better-bites-millet-snack": {
+    materials_ingredients: 90,
+    packaging_circularity: 72,
+    sourcing_people: 88,
+    claims_certifications: 94,
+    evidence_transparency: 96,
+  },
+};
 
 type ListingSeed = {
   platform: CommercePlatform;
@@ -78,6 +170,12 @@ function listing(productId: string, productName: string, seed: ListingSeed): Pla
 
 function makeProduct(seed: ProductSeed): Product {
   const evidence = getEvidenceForProduct(seed.id);
+  const metrics = assembleSustainabilityMetrics(productMetricScores[seed.id]);
+  const numericScore = calculateOverallScore(metrics);
+
+  if (seed.numericScore !== undefined && seed.numericScore !== numericScore) {
+    throw new Error(`Metric score mismatch for ${seed.id}`);
+  }
 
   return {
     id: seed.id,
@@ -101,7 +199,8 @@ function makeProduct(seed: ProductSeed): Product {
       entityId: seed.id,
       band: seed.band,
       confidence: seed.confidence,
-      numericScore: seed.numericScore,
+      numericScore,
+      metrics,
       dimensions: seed.dimensions.map((dimension) => ({
         ...dimension,
         evidenceItemIds: evidence

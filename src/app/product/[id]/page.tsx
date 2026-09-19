@@ -25,6 +25,7 @@ import {
   Rating,
   SectionHeading,
 } from "@/components/experience/shared";
+import { MetricScorecard } from "@/components/experience/scorecard";
 export function generateStaticParams() {
   return getAllProducts().map((p) => ({ id: p.slug }));
 }
@@ -66,13 +67,17 @@ export default async function ProductPage({
           <p className="description">{product.description}</p>
           <div className="product-rating-panel">
             <div>
-              <Rating band={product.rating.band} />
+              <Rating
+                band={product.rating.band}
+                numericScore={product.rating.numericScore}
+              />
               <span className="confidence-label">
                 <ShieldCheck size={14} />
                 {product.rating.confidence} evidence confidence
               </span>
             </div>
             <p>{product.rating.explanation}</p>
+            <MetricScorecard rating={product.rating} />
             <a href="#evidence">
               See what’s behind this rating <ArrowDown size={12} />
             </a>
@@ -151,7 +156,12 @@ export default async function ProductPage({
             {product.rating.perDimension.map((d) => (
               <details className="dimension" key={d.key}>
                 <summary>
-                  <span>{d.label}</span>
+                  <span>
+                    {d.label}
+                    {d.score !== undefined && (
+                      <strong className="dimension-score">{d.score}/100</strong>
+                    )}
+                  </span>
                   <span className="dimension-state">
                     {d.status === "positive"
                       ? "Positive evidence"

@@ -1,12 +1,16 @@
 import Link from "next/link";
-import { ArrowRight, Fingerprint } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Fingerprint } from "lucide-react";
 import { Rating } from "@/components/experience/shared";
 import type { SustainabilityBand } from "@/lib/types/scoring";
+import {
+  sustainabilityMetricDefinitions,
+  sustainabilityMetricOrder,
+} from "@/lib/scoring/metric-framework";
 const bands: Array<[SustainabilityBand, string]> = [
-  ["Excellent", "The strongest assessment band within a category."],
-  ["Strong", "Positive evidence across important category factors."],
-  ["Moderate", "A mixed picture with meaningful room to improve."],
-  ["Weak", "Significant concerns within the available assessment."],
+  ["Excellent", "85–100 · The strongest assessment band within a category."],
+  ["Strong", "70–84 · Positive evidence across important category factors."],
+  ["Moderate", "50–69 · A mixed picture with meaningful room to improve."],
+  ["Weak", "30–49 · Significant concerns within the available assessment."],
   [
     "Insufficient Evidence",
     "Not enough reliable information to form a rating.",
@@ -100,6 +104,74 @@ export default function AboutPage() {
               <span>{description}</span>
             </div>
           ))}
+        </div>
+      </section>
+      <section className="metric-methodology" aria-labelledby="metric-method-title">
+        <div className="metric-method-intro">
+          <p className="eyebrow">THE FIVE-METRIC SCORE</p>
+          <h2 id="metric-method-title">
+            Five numbers.
+            <br />
+            <i>One readable score.</i>
+          </h2>
+          <p>
+            Every product receives five 0–100 subscores. Each metric contributes
+            20% to the overall score. Criteria are normalized within the product
+            category so a shampoo is assessed against relevant shampoo evidence,
+            while a T-shirt uses relevant apparel evidence.
+          </p>
+        </div>
+        <div className="metric-method-list">
+          {sustainabilityMetricOrder.map((key, index) => {
+            const metric = sustainabilityMetricDefinitions[key];
+            return (
+              <article key={key}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div>
+                  <h3>{metric.label}</h3>
+                  <p>{metric.description}</p>
+                </div>
+                <strong>{metric.weight}%</strong>
+              </article>
+            );
+          })}
+        </div>
+        <div className="method-sources">
+          <p>
+            The framework is informed by lifecycle, circularity, supply-chain,
+            certification, and product-claim guidance. This prototype does not
+            claim formal alignment or certification.
+          </p>
+          <div>
+            <a
+              href="https://green-forum.ec.europa.eu/green-business/environmental-footprint-methods/pef-method_en"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              EU Product Environmental Footprint <ArrowUpRight size={13} />
+            </a>
+            <a
+              href="https://www.ellenmacarthurfoundation.org/topics/circular-economy-introduction/overview"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Circular economy principles <ArrowUpRight size={13} />
+            </a>
+            <a
+              href="https://www.oecd.org/en/topics/sub-issues/due-diligence-guidance-for-responsible-business-conduct/responsible-garment-and-footwear-supply-chains.html"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              OECD supply-chain due diligence <ArrowUpRight size={13} />
+            </a>
+            <a
+              href="https://wedocs.unep.org/handle/20.500.11822/22180"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              UNEP product claims guidance <ArrowUpRight size={13} />
+            </a>
+          </div>
         </div>
       </section>
       <section className="trust-block" style={{ marginTop: 20 }}>

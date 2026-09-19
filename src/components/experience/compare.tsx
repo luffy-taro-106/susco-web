@@ -106,11 +106,24 @@ export function CompareExperience({ initialIds }: { initialIds: string[] }) {
               <tbody>
                 {[
                   [
-                    "Sustainability",
+                    "Overall SusCo score",
                     products.map((p) => (
-                      <Rating key={p.id} band={p.rating.band} />
+                      <Rating
+                        key={p.id}
+                        band={p.rating.band}
+                        numericScore={p.rating.numericScore}
+                      />
                     )),
                   ],
+                  ...products[0].rating.metrics.map((metric, metricIndex) => [
+                    metric.label,
+                    products.map((p) => (
+                      <span className="compare-metric" key={p.id}>
+                        <strong>{p.rating.metrics[metricIndex].score}</strong>
+                        <small>/100</small>
+                      </span>
+                    )),
+                  ]),
                   [
                     "Evidence confidence",
                     products.map((p) => (
